@@ -6,6 +6,9 @@ import Dashboard from './pages/Dashboard'
 import OrderList from './pages/OrderList'
 import OrderCreate from './pages/OrderCreate'
 import OrderDetail from './pages/OrderDetail'
+import ProductList from './pages/ProductList'
+import ProductCreate from './pages/ProductCreate'
+import ProductDetail from './pages/ProductDetail'
 import Layout from './components/Layout'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -45,6 +48,9 @@ function App() {
               <Route path="orders" element={<OrderList />} />
               <Route path="orders/create" element={<OrderCreate />} />
               <Route path="orders/:id" element={<OrderDetail />} />
+              <Route path="products" element={<ProductList />} />
+              <Route path="products/create" element={<ProductCreate />} />
+              <Route path="products/:id" element={<ProductDetail />} />
             </Route>
           </Routes>
         </AuthProvider>

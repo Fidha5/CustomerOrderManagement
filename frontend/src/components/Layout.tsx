@@ -88,6 +88,20 @@ function Layout() {
               Orders
             </Link>
 
+            <Link
+              to="/products"
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium ${
+                isActive('/products') || isActive('/products/create') || isActive('/products/')
+                  ? 'bg-primary-light text-primary'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7l8-4m0 10L4 17" />
+              </svg>
+              Products
+            </Link>
+
             {/* Mobile-only close button */}
             <button
               onClick={() => setIsMobileMenuOpen(false)}

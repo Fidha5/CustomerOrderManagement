@@ -1,4 +1,4 @@
-import apiClient, { API_URL } from './api'
+import apiClient from './api'
 import { CreateOrderDto, UpdateOrderDto, OrderQueryParams, Order, PaginatedResponse } from '../types'
 
 export const orderService = {

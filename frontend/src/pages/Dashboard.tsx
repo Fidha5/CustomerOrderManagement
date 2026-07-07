@@ -119,6 +119,39 @@ function Dashboard() {
         </button>
       </div>
 
+      {/* Quick Actions */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <button
+          onClick={() => navigate('/orders/create')}
+          className="flex items-center p-4 bg-white border border-gray-200 rounded-lg hover:border-primary hover:shadow-md transition-all"
+        >
+          <div className="bg-blue-50 p-3 rounded-full mr-4">
+            <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+          </div>
+          <div className="text-left">
+            <h3 className="font-semibold text-gray-900">Create Order</h3>
+            <p className="text-sm text-gray-600">Create a new customer order</p>
+          </div>
+        </button>
+
+        <button
+          onClick={() => navigate('/products')}
+          className="flex items-center p-4 bg-white border border-gray-200 rounded-lg hover:border-primary hover:shadow-md transition-all"
+        >
+          <div className="bg-green-50 p-3 rounded-full mr-4">
+            <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7l8-4m0 10L4 17" />
+            </svg>
+          </div>
+          <div className="text-left">
+            <h3 className="font-semibold text-gray-900">Manage Products</h3>
+            <p className="text-sm text-gray-600">View and manage product catalog</p>
+          </div>
+        </button>
+      </div>
+
       {/* Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-lg border border-gray-200">
