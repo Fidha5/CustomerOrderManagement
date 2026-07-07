@@ -3,6 +3,17 @@ import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
+  // Log environment variables for debugging
+  console.log('=== Environment Variables Debug ===');
+  console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'SET' : 'NOT SET');
+  console.log('DIRECT_URL:', process.env.DIRECT_URL ? 'SET' : 'NOT SET');
+  console.log('JWT_SECRET:', process.env.JWT_SECRET ? 'SET' : 'NOT SET');
+  console.log('NODE_ENV:', process.env.NODE_ENV || 'NOT SET');
+  console.log('PORT:', process.env.PORT || 'NOT SET');
+  console.log('FRONTEND_URL:', process.env.FRONTEND_URL || 'NOT SET');
+  console.log('CLOUD_FUNCTIONS:', process.env.CLOUD_FUNCTIONS || 'NOT SET');
+  console.log('=== End Environment Debug ===');
+
   const app = await NestFactory.create(AppModule);
 
   // Enable CORS
