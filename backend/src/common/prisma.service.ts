@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
 @Injectable()
@@ -6,11 +6,22 @@ export class PrismaService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
+  private readonly logger = new Logger(PrismaService.name);
+
   constructor() {
+    const databaseUrl = process.env.DATABASE_URL;
+
+    if (!databaseUrl) {
+      throw new Error(
+        'DATABASE_URL environment variable is not set. ' +
+        'Please ensure it is configured in your deployment environment.'
+      );
+    }
+
     super({
       datasources: {
         db: {
-          url: process.env.DATABASE_URL,
+          url: databaseUrl,
         },
       },
     });
