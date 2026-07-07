@@ -17,7 +17,7 @@ function Layout() {
   const isActive = (path: string) => location.pathname === path
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Top Navigation */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="flex items-center justify-between px-4 sm:px-6 py-4">
@@ -58,10 +58,11 @@ function Layout() {
         />
       )}
 
-      <div className="flex">
+      <div className="flex flex-1 overflow-hidden">
         {/* Sidebar Navigation */}
-        <aside className={`${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0 fixed sm:static z-50 w-64 bg-white border-r border-gray-200 min-h-screen transition-transform duration-300 ease-in-out`}>
-          <nav className="p-4 space-y-2">
+        <aside className={`${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0 fixed sm:relative z-50 w-64 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out sm:z-0`}>
+          <div className="h-full flex flex-col overflow-y-auto">
+            <nav className="p-4 space-y-2 flex-1">
             <Link
               to="/"
               className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium ${
@@ -112,36 +113,12 @@ function Layout() {
               </svg>
               Close Menu
             </button>
-
-            {/* Future navigation items */}
-            {/* <Link
-              to="/customers"
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium ${
-                isActive('/customers') ? 'bg-primary-light text-primary' : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
-              Customers
-            </Link>
-
-            <Link
-              to="/products"
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium ${
-                isActive('/products') ? 'bg-primary-light text-primary' : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7l8-4m0 10L4 17" />
-              </svg>
-              Products
-            </Link> */}
           </nav>
-        </aside>
+        </div>
+      </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6">
+        <main className="flex-1 overflow-y-auto p-6">
           <Breadcrumbs />
           <Outlet />
         </main>
