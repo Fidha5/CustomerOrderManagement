@@ -1,5 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsUUID, IsDate, IsOptional, IsArray, IsNumber, Min, Max, ValidateNested, IsString, MaxLength } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsUUID,
+  IsDate,
+  IsOptional,
+  IsArray,
+  IsNumber,
+  Min,
+  ValidateNested,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateOrderItemDto {
@@ -14,9 +25,12 @@ export class CreateOrderItemDto {
   @Min(1, { message: 'Quantity must be at least 1' })
   quantity: number;
 
-  @ApiProperty({ example: 50000.00, description: 'Unit price' })
+  @ApiProperty({ example: 50000.0, description: 'Unit price' })
   @IsNotEmpty({ message: 'Unit price is required' })
-  @IsNumber({ maxDecimalPlaces: 2 }, { message: 'Unit price must be a valid number' })
+  @IsNumber(
+    { maxDecimalPlaces: 2 },
+    { message: 'Unit price must be a valid number' },
+  )
   @Min(0, { message: 'Unit price cannot be negative' })
   unitPrice: number;
 
@@ -33,21 +47,35 @@ export class CreateOrderDto {
   @IsUUID()
   customerId: string;
 
-  @ApiProperty({ example: '2026-07-15', required: false, description: 'Order date' })
+  @ApiProperty({
+    example: '2026-07-15',
+    required: false,
+    description: 'Order date',
+  })
   @IsOptional()
   @IsDate()
   @Type(() => Date)
   orderDate?: Date;
 
-  @ApiProperty({ example: 5000.00, required: false, description: 'Tax amount' })
+  @ApiProperty({ example: 5000.0, required: false, description: 'Tax amount' })
   @IsOptional()
-  @IsNumber({ maxDecimalPlaces: 2 }, { message: 'Tax amount must be a valid number' })
+  @IsNumber(
+    { maxDecimalPlaces: 2 },
+    { message: 'Tax amount must be a valid number' },
+  )
   @Min(0, { message: 'Tax amount cannot be negative' })
   taxAmount?: number;
 
-  @ApiProperty({ example: 0.00, required: false, description: 'Discount amount' })
+  @ApiProperty({
+    example: 0.0,
+    required: false,
+    description: 'Discount amount',
+  })
   @IsOptional()
-  @IsNumber({ maxDecimalPlaces: 2 }, { message: 'Discount amount must be a valid number' })
+  @IsNumber(
+    { maxDecimalPlaces: 2 },
+    { message: 'Discount amount must be a valid number' },
+  )
   @Min(0, { message: 'Discount amount cannot be negative' })
   discountAmount?: number;
 

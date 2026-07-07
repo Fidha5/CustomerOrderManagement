@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -22,7 +32,7 @@ export class ProductController {
   @ApiOperation({ summary: 'Get all products' })
   findAll(
     @Query('search') search?: string,
-    @Query('activeOnly') activeOnly?: string
+    @Query('activeOnly') activeOnly?: string,
   ) {
     return this.productService.findAll(search, activeOnly === 'true');
   }

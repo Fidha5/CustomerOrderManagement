@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../../common/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -19,7 +23,7 @@ export class OrderService {
     }
 
     // Validate products and check for duplicates
-    const productIds = createOrderDto.items.map(item => item.productId);
+    const productIds = createOrderDto.items.map((item) => item.productId);
     const uniqueProductIds = new Set(productIds);
 
     if (uniqueProductIds.size !== productIds.length) {
@@ -35,12 +39,15 @@ export class OrderService {
     }
 
     // Calculate line totals and order totals
-    const itemsWithLineTotals = createOrderDto.items.map(item => ({
+    const itemsWithLineTotals = createOrderDto.items.map((item) => ({
       ...item,
       lineTotal: item.quantity * item.unitPrice,
     }));
 
-    const subtotal = itemsWithLineTotals.reduce((sum, item) => sum + item.lineTotal, 0);
+    const subtotal = itemsWithLineTotals.reduce(
+      (sum, item) => sum + item.lineTotal,
+      0,
+    );
     const taxAmount = createOrderDto.taxAmount || 0;
     const discountAmount = createOrderDto.discountAmount || 0;
     const totalAmount = subtotal + taxAmount - discountAmount;
@@ -66,7 +73,7 @@ export class OrderService {
 
       // Create order items
       await tx.orderItem.createMany({
-        data: itemsWithLineTotals.map(item => ({
+        data: itemsWithLineTotals.map((item) => ({
           orderId: newOrder.id,
           productId: item.productId,
           quantity: item.quantity,
@@ -114,9 +121,10 @@ export class OrderService {
       });
 
       const searchTerm = query.search.toLowerCase();
-      const filteredOrders = allOrders.filter(order =>
-        order.orderNumber.toLowerCase().includes(searchTerm) ||
-        order.customer?.name.toLowerCase().includes(searchTerm)
+      const filteredOrders = allOrders.filter(
+        (order) =>
+          order.orderNumber.toLowerCase().includes(searchTerm) ||
+          order.customer?.name.toLowerCase().includes(searchTerm),
       );
 
       // Apply pagination to filtered results
@@ -258,11 +266,13 @@ export class OrderService {
 
     if (updateOrderDto.items && updateOrderDto.items.length > 0) {
       // Check for duplicate products
-      const productIds = updateOrderDto.items.map(item => item.productId);
+      const productIds = updateOrderDto.items.map((item) => item.productId);
       const uniqueProductIds = new Set(productIds);
 
       if (uniqueProductIds.size !== productIds.length) {
-        throw new BadRequestException('Order cannot contain duplicate products');
+        throw new BadRequestException(
+          'Order cannot contain duplicate products',
+        );
       }
 
       // Validate products
@@ -275,18 +285,30 @@ export class OrderService {
       }
 
       // Calculate new line totals and order totals
-      const itemsWithLineTotals = updateOrderDto.items.map(item => ({
+      const itemsWithLineTotals = updateOrderDto.items.map((item) => ({
         ...item,
         lineTotal: item.quantity * item.unitPrice,
       }));
 
-      subtotal = itemsWithLineTotals.reduce((sum, item) => sum + item.lineTotal, 0);
-      const taxAmount = updateOrderDto.taxAmount ?? parseFloat(existingOrder.taxAmount as any);
-      const discountAmount = updateOrderDto.discountAmount ?? parseFloat(existingOrder.discountAmount as any);
+      subtotal = itemsWithLineTotals.reduce(
+        (sum, item) => sum + item.lineTotal,
+        0,
+      );
+      const taxAmount =
+        updateOrderDto.taxAmount ?? parseFloat(existingOrder.taxAmount as any);
+      const discountAmount =
+        updateOrderDto.discountAmount ??
+        parseFloat(existingOrder.discountAmount as any);
       totalAmount = subtotal + taxAmount - discountAmount;
-    } else if (updateOrderDto.taxAmount !== undefined || updateOrderDto.discountAmount !== undefined) {
-      const taxAmount = updateOrderDto.taxAmount ?? parseFloat(existingOrder.taxAmount as any);
-      const discountAmount = updateOrderDto.discountAmount ?? parseFloat(existingOrder.discountAmount as any);
+    } else if (
+      updateOrderDto.taxAmount !== undefined ||
+      updateOrderDto.discountAmount !== undefined
+    ) {
+      const taxAmount =
+        updateOrderDto.taxAmount ?? parseFloat(existingOrder.taxAmount as any);
+      const discountAmount =
+        updateOrderDto.discountAmount ??
+        parseFloat(existingOrder.discountAmount as any);
       totalAmount = subtotal + taxAmount - discountAmount;
     }
 
@@ -303,11 +325,21 @@ export class OrderService {
       const order = await tx.order.update({
         where: { id },
         data: {
-          ...(updateOrderDto.customerId && { customerId: updateOrderDto.customerId }),
-          ...(updateOrderDto.orderStatusId && { orderStatusId: updateOrderDto.orderStatusId }),
-          ...(updateOrderDto.taxAmount !== undefined && { taxAmount: updateOrderDto.taxAmount.toString() }),
-          ...(updateOrderDto.discountAmount !== undefined && { discountAmount: updateOrderDto.discountAmount.toString() }),
-          ...(updateOrderDto.notes !== undefined && { notes: updateOrderDto.notes }),
+          ...(updateOrderDto.customerId && {
+            customerId: updateOrderDto.customerId,
+          }),
+          ...(updateOrderDto.orderStatusId && {
+            orderStatusId: updateOrderDto.orderStatusId,
+          }),
+          ...(updateOrderDto.taxAmount !== undefined && {
+            taxAmount: updateOrderDto.taxAmount.toString(),
+          }),
+          ...(updateOrderDto.discountAmount !== undefined && {
+            discountAmount: updateOrderDto.discountAmount.toString(),
+          }),
+          ...(updateOrderDto.notes !== undefined && {
+            notes: updateOrderDto.notes,
+          }),
           subtotal: subtotal.toString(),
           totalAmount: totalAmount.toString(),
         },
@@ -321,13 +353,13 @@ export class OrderService {
         });
 
         // Create new items
-        const itemsWithLineTotals = updateOrderDto.items.map(item => ({
+        const itemsWithLineTotals = updateOrderDto.items.map((item) => ({
           ...item,
           lineTotal: item.quantity * item.unitPrice,
         }));
 
         await tx.orderItem.createMany({
-          data: itemsWithLineTotals.map(item => ({
+          data: itemsWithLineTotals.map((item) => ({
             orderId: id,
             productId: item.productId,
             quantity: item.quantity,
@@ -339,13 +371,18 @@ export class OrderService {
       }
 
       // Create order history entry
-      if (updateOrderDto.orderStatusId && updateOrderDto.orderStatusId !== existingOrder.orderStatusId) {
+      if (
+        updateOrderDto.orderStatusId &&
+        updateOrderDto.orderStatusId !== existingOrder.orderStatusId
+      ) {
         await tx.orderHistory.create({
           data: {
             orderId: id,
             changeType: 'STATUS_CHANGED',
             oldValue: JSON.stringify({ statusId: existingOrder.orderStatusId }),
-            newValue: JSON.stringify({ statusId: updateOrderDto.orderStatusId }),
+            newValue: JSON.stringify({
+              statusId: updateOrderDto.orderStatusId,
+            }),
           },
         });
       } else {
@@ -371,8 +408,16 @@ export class OrderService {
 
   async getStatistics() {
     const now = new Date();
-    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+    const startOfDay = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+    );
+    const startOfWeek = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - now.getDay(),
+    );
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
     const [
@@ -461,7 +506,9 @@ export class OrderService {
     let sequenceNumber = 1;
 
     if (lastOrder) {
-      const lastSequence = parseInt(lastOrder.orderNumber.split('-').pop() || '0');
+      const lastSequence = parseInt(
+        lastOrder.orderNumber.split('-').pop() || '0',
+      );
       sequenceNumber = lastSequence + 1;
     }
 

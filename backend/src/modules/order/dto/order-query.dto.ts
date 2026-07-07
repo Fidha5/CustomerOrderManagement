@@ -3,7 +3,10 @@ import { IsOptional, IsString, IsInt, IsUUID, Min, Max } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class OrderQueryDto {
-  @ApiProperty({ required: false, description: 'Search by order number or customer name' })
+  @ApiProperty({
+    required: false,
+    description: 'Search by order number or customer name',
+  })
   @IsOptional()
   @IsString()
   search?: string;

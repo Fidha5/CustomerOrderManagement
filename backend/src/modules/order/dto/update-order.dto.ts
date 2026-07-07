@@ -1,5 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsUUID, IsDate, IsArray, IsNumber, IsInt, Min, Max, ValidateNested, IsString, MaxLength } from 'class-validator';
+import {
+  IsOptional,
+  IsUUID,
+  IsDate,
+  IsArray,
+  IsNumber,
+  IsInt,
+  Min,
+  Max,
+  ValidateNested,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateOrderItemDto } from './create-order.dto';
 
@@ -22,15 +34,21 @@ export class UpdateOrderDto {
   @Max(4, { message: 'Order status ID must be between 1 and 4' })
   orderStatusId?: number;
 
-  @ApiProperty({ example: 5000.00, required: false })
+  @ApiProperty({ example: 5000.0, required: false })
   @IsOptional()
-  @IsNumber({ maxDecimalPlaces: 2 }, { message: 'Tax amount must be a valid number' })
+  @IsNumber(
+    { maxDecimalPlaces: 2 },
+    { message: 'Tax amount must be a valid number' },
+  )
   @Min(0, { message: 'Tax amount cannot be negative' })
   taxAmount?: number;
 
-  @ApiProperty({ example: 0.00, required: false })
+  @ApiProperty({ example: 0.0, required: false })
   @IsOptional()
-  @IsNumber({ maxDecimalPlaces: 2 }, { message: 'Discount amount must be a valid number' })
+  @IsNumber(
+    { maxDecimalPlaces: 2 },
+    { message: 'Discount amount must be a valid number' },
+  )
   @Min(0, { message: 'Discount amount cannot be negative' })
   discountAmount?: number;
 

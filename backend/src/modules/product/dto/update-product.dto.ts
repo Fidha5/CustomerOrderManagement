@@ -2,5 +2,5 @@ import { PartialType, OmitType } from '@nestjs/swagger';
 import { CreateProductDto } from './create-product.dto';
 
 export class UpdateProductDto extends PartialType(
-  OmitType(CreateProductDto, [] as const)
+  OmitType(CreateProductDto, [] as const),
 ) {}

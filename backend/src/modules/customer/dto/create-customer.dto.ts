@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsEmail, IsOptional, MaxLength } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsEmail,
+  IsOptional,
+  MaxLength,
+} from 'class-validator';
 
 export class CreateCustomerDto {
   @ApiProperty({ example: 'CUST-001', description: 'Unique customer number' })

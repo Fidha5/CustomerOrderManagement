@@ -13,7 +13,9 @@ async function bootstrap() {
       credentials: false,
     });
   } else {
-    const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173').split(',');
+    const allowedOrigins = (
+      process.env.FRONTEND_URL || 'http://localhost:5173'
+    ).split(',');
     app.enableCors({
       origin: allowedOrigins,
       credentials: true,

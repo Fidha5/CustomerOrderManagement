@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { PrismaService } from '../../common/prisma.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
@@ -30,9 +34,10 @@ export class CustomerService {
       });
 
       const searchTerm = search.toLowerCase();
-      return customers.filter(customer =>
-        customer.name.toLowerCase().includes(searchTerm) ||
-        customer.customerNumber.toLowerCase().includes(searchTerm)
+      return customers.filter(
+        (customer) =>
+          customer.name.toLowerCase().includes(searchTerm) ||
+          customer.customerNumber.toLowerCase().includes(searchTerm),
       );
     }
 
@@ -90,7 +95,9 @@ export class CustomerService {
     });
 
     if (ordersCount > 0) {
-      throw new ConflictException('Cannot delete customer with existing orders');
+      throw new ConflictException(
+        'Cannot delete customer with existing orders',
+      );
     }
 
     return this.prisma.customer.delete({
