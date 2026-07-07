@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  name         String
+  role         String    @default("sales_executive")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  @@map("user")
+}
+
+// Customer model
+model Customer {
+  id             String    @id @default(uuid())
+  customerNumber String    @unique @map("customer_number")
+  name           String
+  email          String?
+  phone          String?
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  orders         Order[]
+
+  @@map("customer")
+}
+
+// Product model
+model Product {
+  id           String    @id @default(uuid())
+  productCode  String    @unique @map("product_code")
+  name         String
+  description  String?
+  basePrice    String    @default("0.00") @map("base_price")
+  isActive     Boolean   @default(true) @map("is_active")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  orderItems   OrderItem[]
+
+  @@map("product")
+}
+
+// Order status lookup table
+model OrderStatus {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  isDefault   Boolean  @default(false) @map("is_default")
+
+  orders      Order[]
+
+  @@map("order_status")
+}
+
+// Order model
+model Order {
+  id              String      @id @default(uuid())
+  orderNumber     String      @unique @map("order_number")
+  customerId      String      @map("customer_id")
+  orderStatusId   Int         @default(1) @map("order_status_id")
+  orderDate       DateTime    @default(now()) @map("order_date")
+  subtotal        String     @default("0.00")
+  taxAmount       String     @default("0.00") @map("tax_amount")
+  discountAmount  String     @default("0.00") @map("discount_amount")
+  totalAmount     String     @default("0.00") @map("total_amount")
+  notes           String?
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  customer        Customer    @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  status          OrderStatus @relation(fields: [orderStatusId], references: [id], onDelete: Restrict)
+  items           OrderItem[]
+  history         OrderHistory[]
+
+  @@map("order")
+}
+
+// Order item model
+model OrderItem {
+  id         String    @id @default(uuid())
+  orderId    String    @map("order_id")
+  productId  String    @map("product_id")
+  quantity   Int       @default(1)
+  unitPrice  String   @default("0.00") @map("unit_price")
+  lineTotal  String   @default("0.00") @map("line_total")
+  notes      String?
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  order      Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product    Product   @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@map("order_item")
+}
+
+// Order history for audit trail
+model OrderHistory {
+  id         String    @id @default(uuid())
+  orderId    String    @map("order_id")
+  changedBy  String?   @map("changed_by")
+  changeType String    @map("change_type")
+  oldValue   String?   @map("old_value")
+  newValue   String?   @map("new_value")
+  changedAt  DateTime  @default(now()) @map("changed_at")
+
+  order      Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_history")
+}
