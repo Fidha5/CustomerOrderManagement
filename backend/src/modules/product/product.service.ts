@@ -34,8 +34,8 @@ export class ProductService {
 
     if (search) {
       where.OR = [
-        { name: { contains: search, mode: 'insensitive' as const } },
-        { productCode: { contains: search, mode: 'insensitive' as const } },
+        { name: { contains: search } },
+        { productCode: { contains: search } },
       ];
     }
 
