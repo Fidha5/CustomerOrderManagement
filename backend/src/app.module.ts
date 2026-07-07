@@ -11,7 +11,6 @@ import { OrderModule } from './modules/order/order.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
     }),
     PrismaModule,
     AppConfigModule,
