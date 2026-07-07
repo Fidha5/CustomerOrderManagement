@@ -1,0 +1,20 @@
+services:
+  # Backend API Service
+  - type: web
+    name: customer-order-api
+    env: node
+    region: singapore
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:prod
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_8RnB0fExOYLQ@ep-patient-king-aox3f3ak.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
+      - key: DIRECT_URL
+        value: postgresql://neondb_owner:npg_8RnB0fExOYLQ@ep-patient-king-aox3f3ak.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
+      - key: JWT_SECRET
+        value: your-super-secret-jwt-key-change-in-production
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000

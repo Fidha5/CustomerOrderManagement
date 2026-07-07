@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "customer-management-70ec9"
+  },
+  "targets": {
+    "hosting": {
+      "default": [
+        {
+          "target": "customer-order-app",
+          "site": "customer-management-70ec9"
+        }
+      ]
+    }
+  }
+}

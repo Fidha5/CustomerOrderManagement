@@ -6,8 +6,14 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS - development mode
-  if (process.env.NODE_ENV === 'development') {
+  // Enable CORS
+  if (process.env.CLOUD_FUNCTIONS === 'true') {
+    // Cloud Functions environment - allow all origins (configure in Firebase Console)
+    app.enableCors({
+      origin: true,
+      credentials: true,
+    });
+  } else if (process.env.NODE_ENV === 'development') {
     app.enableCors({
       origin: '*',
       credentials: false,
@@ -34,21 +40,26 @@ async function bootstrap() {
   // API prefix
   app.setGlobalPrefix('api');
 
-  // Swagger documentation
-  const config = new DocumentBuilder()
-    .setTitle('Customer Order Management API')
-    .setDescription('API for managing customer orders')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
+  // Swagger documentation (only for non-Cloud Functions)
+  if (process.env.CLOUD_FUNCTIONS !== 'true') {
+    const config = new DocumentBuilder()
+      .setTitle('Customer Order Management API')
+      .setDescription('API for managing customer orders')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api/docs', app, document);
+  }
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
-  console.log(`🚀 Application is running on: http://localhost:${port}`);
-  console.log(`📚 API documentation: http://localhost:${port}/api/docs`);
+
+  if (process.env.CLOUD_FUNCTIONS !== 'true') {
+    console.log(`🚀 Application is running on: http://localhost:${port}`);
+    console.log(`📚 API documentation: http://localhost:${port}/api/docs`);
+  }
 }
 
 bootstrap();
