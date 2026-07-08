@@ -19,4 +19,4 @@ services:
       - key: PORT
         value: 10000
       - key: FRONTEND_URL
-        value: https://customer-management-70ec9.webapp
+        value: https://customer-management-70ec9.web.app
