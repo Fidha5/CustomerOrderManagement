@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-// Use relative path to go through Vite proxy, or fall back to direct URL
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+// Direct URL to production API
+const API_URL = 'https://customer-order-api-v2.onrender.com/api'
 
 export const apiClient = axios.create({
   baseURL: API_URL,
